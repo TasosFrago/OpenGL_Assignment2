@@ -22,7 +22,7 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 
 void error_callback(int error, const char *description)
 {
-	DBG_LOG_VAR(description, ERROR);
+	DBG_LOG(description, ERROR);
 }
 
 void createWindow(window_t *window)

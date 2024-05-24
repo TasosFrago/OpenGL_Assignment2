@@ -1,0 +1,17 @@
+* Erg 2
+
+** Ask1
+
+- [X] Include all the window libraries
+
+- [ ] Make shader util
+
+- [ ] Make the build system
+
+- [ ] Build with a simple triangle to test
+
+- [ ] Test parametric polygon generation
+
+- [ ] Move it into a library
+
+- [ ] Finish
