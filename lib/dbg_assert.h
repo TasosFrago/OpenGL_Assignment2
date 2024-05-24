@@ -10,12 +10,12 @@
 	#define DBG_ASSERT(expr) \
 		(void)((expr) || (__dbg_assert(#expr, __FILE__, __LINE__, __func__), 0) )
 
-	#define DBG_LOG(msg, level) \
-		__dbg_log(msg, __FILE__, __LINE__, __func__, level)
 #else
 	#define DBG_ASSERT(expr) (void)0
-	#define DBG_LOG(msg, level) (void)0
 #endif
+
+#define DBG_LOG(msg, level) \
+	__dbg_log(msg, __FILE__, __LINE__, __func__, level)
 
 
 #if defined(__cplusplus)

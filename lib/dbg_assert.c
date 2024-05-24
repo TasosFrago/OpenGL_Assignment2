@@ -12,7 +12,6 @@ void __dbg_assert(const char *expr, const char *file, int line, const char *func
 
 void __dbg_log(const char *msg, const char *file, int line, const char *func, errorL_t level)
 {
-	printf("%d\n", level);
 	switch(level) {
 	case LOG:
 		fprintf(stdout, "[LOG]::%s\n\tFILE: %s\n\tLINE: %d\n\tFUNCTION: %s\n", msg, file, line, func);

@@ -31,7 +31,7 @@ void createWindow(window_t *window)
 	DBG_ASSERT(window->width > 100 && window->height >100);
 
 	if(!glfwInit()) {
-		DBG_LOG("Failed to initialize glfw.\n", ERROR);
+		fprintf(stderr, "Failed to initialize glfw.\n");
 		exit(-1);
 	}
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -41,7 +41,7 @@ void createWindow(window_t *window)
 	window->win_ptr = glfwCreateWindow(window->width, window->height, "Conway's Game of Life", NULL, NULL);
 
 	if(!window) {
-		DBG_LOG("Failed to initialize window.\n", ERROR);
+		fprintf(stderr, "Failed to initialize window.\n");
 		exit(-1);
 	}
 
@@ -50,7 +50,7 @@ void createWindow(window_t *window)
 	glfwSetFramebufferSizeCallback(window->win_ptr, FrameBufferSizeCallback);
 
 	if(glewInit() != GLEW_OK) {
-		DBG_LOG("Failed to initialize glew.\n", ERROR);
+		fprintf(stderr, "Failed to initialize glew.\n");
 		glfwTerminate();
 		exit(-1);
 	}
