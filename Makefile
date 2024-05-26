@@ -16,7 +16,10 @@ CXX_SRCS = ./ask1/src/58633_11.cpp
 
 C_SRCS = ./lib/dbg_assert.c \
 		 ./lib/shader_utl.c \
-		 ./lib/windowGlfw.c
+		 ./lib/windowGlfw.c \
+		 ./lib/vertexArray/vao.c \
+		 ./lib/vertexArray/vbo.c \
+		 ./lib/vertexArray/vbLayout.c
 
 CXX_OBJS = $(CXX_SRCS:.cpp=.o)
 C_OBJS = $(C_SRCS:.c=.o)

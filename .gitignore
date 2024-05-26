@@ -1,6 +1,3 @@
 main
-lib/dbg_assert.o
-lib/shader_utl.o
-lib/windowGlfw.o
-ask1/src/58633_11.o
 .cache
+*.o

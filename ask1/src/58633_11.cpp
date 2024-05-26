@@ -10,6 +10,7 @@
 #include "lib/windowGlfw.h"
 #include "lib/dbg_assert.h"
 #include "lib/shader_utl.h"
+#include "lib/vertexArray/vao.h"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -54,36 +55,53 @@ int main()
 		 0.0f,  0.5f, 0.0f,
 	};
 
-	uint32_t VBO, VAO;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	VAO_t vao;
+	vaoGen(&vao);
+	vaoBind(&vao);
+	VBO_t vbo;
+	vboGen(&vbo, vertices, sizeof(vertices), GL_STATIC_DRAW);
 
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	VBLayout_t vbl = {};
+	vbl_new(&vbl);
+	vbl_push_float(&vbl, 3);
+
+	vaoAddBuffer(&vao, &vbo, &vbl);
+	DBG_GLCHECKERROR();
+
+	vbl_destroy(&vbl);
+
+	// uint32_t VBO, VAO;
+	// glGenVertexArrays(1, &VAO);
+	// glBindVertexArray(VAO);
+
+	// glGenBuffers(1, &VBO);
+	// glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	// glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	uint32_t shader = shaderLoadProgram("./shaders/testVertexShader.glsl", "./shaders/testFragmentShader.glsl");
 	DBG_ASSERT(shader != 0);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (const void *)0);
-	glEnableVertexAttribArray(0);
+	// glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (const void *)0);
+	// glEnableVertexAttribArray(0);
 
 	while(!glfwWindowShouldClose(window.win_ptr)) {
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// shaderUse(shader);
-		glUseProgram(shader);
+		shaderUse(shader);
 		DBG_GLCHECKERROR();
 
-		glBindVertexArray(VAO);
+		// glBindVertexArray(VAO);
+		vaoBind(&vao);
 		DBG_GLCHECKERROR();
+
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		DBG_GLCHECKERROR();
 
 		glfwSwapBuffers(window.win_ptr);
 		glfwPollEvents();
 	}
+	vaoDelete(&vao);
 
 	destroyWindow(&window);
 
