@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <GL/glew.h>
-
 #include "windowGlfw.h"
 #include "dbg_assert.h"
 
@@ -64,6 +62,5 @@ void destroyWindow(window_t *window)
 	if(window) {
 		glfwDestroyWindow(window->win_ptr);
 		glfwTerminate();
-		free(window);
 	}
 }

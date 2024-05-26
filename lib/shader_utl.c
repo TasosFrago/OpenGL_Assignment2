@@ -1,89 +1,67 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdint.h>
 
-#include <GL/glew.h>
-
+#include "shader_utl.h"
 #include "dbg_assert.h"
 
-GLuint compileShader(GLenum shaderType, const char *source) {
-    GLuint shader = glCreateShader(shaderType);
-    glShaderSource(shader, 1, &source, NULL);
-    glCompileShader(shader);
 
-    GLint success;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        GLchar infoLog[512];
-        glGetShaderInfoLog(shader, sizeof(infoLog), NULL, infoLog);
-        fprintf(stderr, "Shader compilation failed: %s\n", infoLog);
-        glDeleteShader(shader);
-        return 0;
-    }
+// Internal Helper functions prototypes
+static void __readFile(char **buffer, const char *filepath);
+static GLuint __createShaderProgram(const char *vertexSrc, const char *fragmentSrc);
+static GLuint __compileShader(GLenum shaderType, const char *src);
 
-    return shader;
+GLint shaderValidate(GLuint program)
+{
+	glValidateProgram(program);
+
+	GLint isValid = false;
+	glGetProgramiv(program, GL_COMPILE_STATUS, &isValid);
+	if(isValid == GL_FALSE) {
+		GLint maxlength = 0;
+		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxlength);
+		GLchar *errorLog = malloc(maxlength * sizeof(maxlength));
+
+		glGetProgramInfoLog(program, maxlength, &maxlength, &errorLog[0]);
+
+		fprintf(stderr, "\033[0;31m[ERROR]\033[0m::Failed to validate shader::%s\n", errorLog);
+		free(errorLog);
+	}
+	return isValid;
 }
 
-GLuint createShaderProgram(const char *vertexSource, const char *fragmentSource) {
-    GLuint vertexShader = compileShader(GL_VERTEX_SHADER, vertexSource);
-    GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentSource);
+GLuint shaderLoadProgram(const char *vertexPath, const char *fragmentPath)
+{
+	// Create vertexSrc pointer to pass
+	char *vertexSrc = NULL;
+	__readFile(&vertexSrc, vertexPath); // Get the code from the file
 
-    if (!vertexShader || !fragmentShader) {
-        return 0;
-    }
+	// Create fragmentSrc pointer to pass
+	char *fragmentSrc = NULL;
+	__readFile(&fragmentSrc, fragmentPath); // Get the code from the file
 
-    GLuint shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
+	// Check return for errors
+	if(vertexSrc == NULL || fragmentSrc == NULL) {
+		fprintf(stderr, "\033[0;31m[ERROR]\033[0m::Didn't read VertexShader or FragmentShader.\n");
+		return 0;
+	}
 
-    GLint success;
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        GLchar infoLog[512];
-        glGetProgramInfoLog(shaderProgram, sizeof(infoLog), NULL, infoLog);
-        fprintf(stderr, "Shader linking failed: %s\n", infoLog);
-        glDeleteProgram(shaderProgram);
-        return 0;
-    }
+	// Create shader Program
+	GLuint shaderProgram = __createShaderProgram(vertexSrc, fragmentSrc);
+	DBG_ASSERT(shaderProgram != 0);
 
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+	// Free src pointers
+	free(vertexSrc);
+	free(fragmentSrc);
 
-    return shaderProgram;
+	return shaderProgram;
 }
 
-char* readShaderSource(const char* filePath) {
-    FILE* file = fopen(filePath, "rb");
-    if (!file) {
-        fprintf(stderr, "Failed to open file: %s\n", filePath);
-        return NULL;
-    }
-
-    fseek(file, 0, SEEK_END);
-    long length = ftell(file);
-    fseek(file, 0, SEEK_SET);
-
-    char* buffer = (char*)malloc(length + 1);
-    if (!buffer) {
-        fprintf(stderr, "Failed to allocate memory for shader source\n");
-        fclose(file);
-        return NULL;
-    }
-
-    fread(buffer, 1, length, file);
-    buffer[length] = '\0';
-
-    fclose(file);
-    return buffer;
-}
-
-static void __readFile(char *buffer, const char *filepath)
+static void __readFile(char **buffer, const char *filepath)
 {
 	FILE *file = fopen(filepath, "rt");
 	if(file == NULL) {
-		fprintf(stderr, "[ERROR]::Failed to open file: %s\n", filepath);
+		fprintf(stderr, "\033[0;31m[ERROR]\033[0m::Failed to open file: %s\n", filepath);
 		return;
 	}
 
@@ -94,52 +72,94 @@ static void __readFile(char *buffer, const char *filepath)
 	fseek(file, 0, SEEK_SET);
 
 	if(fileSize > 0) {
-		buffer = (char *)malloc((fileSize + 1) * sizeof(char));
-		if(buffer == NULL) {
-			fprintf(stderr, "[ERROR]::Failed to allocate memory for file: %s\n", filepath);
+		*buffer = (char *)malloc((fileSize + 1) * sizeof(char));
+		if(*buffer == NULL) {
+			fprintf(stderr, "\033[0;31m[ERROR]\033[0m::Failed to allocate memory for file: %s\n", filepath);
 			return;
 		}
 		// Read file
-		uint32_t count = fread(buffer, sizeof(char), fileSize, file);
+		uint32_t count = fread(*buffer, sizeof(char), fileSize, file);
 
 		// Correct buffer size accounting for \r\n characters
 		if(count < fileSize) {
-			buffer = realloc(buffer, count + 1);
+			*buffer = realloc(*buffer, count + 1);
 		}
 
 		// Terminate buffer
-		buffer[count] = '\0';
+		*buffer[count] = '\0';
 	}
 	fclose(file);
 }
 
-GLuint loadShaderProgram(const char *vertexPath, const char *fragmentPath, const char *geometricPath)
+static GLuint __createShaderProgram(const char *vertexSrc, const char *fragmentSrc)
 {
-	char *vertexSrc;
-	__readFile(vertexSrc, vertexPath);
+	// Compile Shaders
+	GLuint vertexShader = __compileShader(GL_VERTEX_SHADER, vertexSrc);
+	GLuint fragmentShader = __compileShader(GL_FRAGMENT_SHADER, fragmentSrc);
 
-	char *fragmentSrc;
-	__readFile(fragmentSrc, fragmentPath);
-
-	char *geometricSrc;
-	if(geometricPath != NULL) {
-		__readFile(geometricSrc, geometricPath);
+	// Check return for errors
+	if(vertexShader == 0 || fragmentShader == 0) {
+		return 0;
 	}
-	return 1;
+
+	// Create Program
+	GLuint shaderProgram = glCreateProgram();
+	DBG_ASSERT(shaderProgram != 0);
+
+	// Attch the shaders
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+
+	// Link the shaders
+	glLinkProgram(shaderProgram);
+
+	// Chech for linking errors
+	GLint isLinked = false;
+	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &isLinked);
+	if(isLinked == GL_FALSE) {
+		GLint maxlength = 0;
+		glGetProgramiv(shaderProgram, GL_INFO_LOG_LENGTH, &maxlength);
+		GLchar *errorLog = malloc(maxlength * sizeof(maxlength));
+
+		glGetProgramInfoLog(shaderProgram, maxlength, &maxlength, &errorLog[0]);
+
+		fprintf(stderr, "\033[0;31m[ERROR]\033[0m::Failed to link shaders::%s\n", errorLog);
+		free(errorLog);
+
+		glDeleteProgram(shaderProgram);
+		glDeleteShader(vertexShader);
+		glDeleteShader(fragmentShader);
+		return 0;
+	}
+
+	// Delete the shaders
+	glDeleteShader(vertexShader);
+	glDeleteShader(fragmentShader);
+
+	return shaderProgram;
 }
 
-GLuint loadShaderProgram(const char *vertexPath, const char *fragmentPath) {
-    char *vertexSource = readShaderSource(vertexPath);
-    char *fragmentSource = readShaderSource(fragmentPath);
+static GLuint __compileShader(GLenum shaderType, const char *src)
+{
+	GLuint shader = glCreateShader(shaderType);
+	DBG_ASSERT(shader != 0);
 
-    if (!vertexSource || !fragmentSource) {
-        return 0;
-    }
+	glShaderSource(shader, 1, &src, NULL);
+	glCompileShader(shader);
 
-    GLuint shaderProgram = createShaderProgram(vertexSource, fragmentSource);
+	GLint isCompiled = false;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+	if(isCompiled == GL_FALSE) {
+		GLint maxlength = 0;
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxlength);
+		GLchar *errorLog = malloc(maxlength * sizeof(maxlength));
 
-    free(vertexSource);
-    free(fragmentSource);
+		glGetShaderInfoLog(shader, maxlength, &maxlength, &errorLog[0]);
 
-    return shaderProgram;
+		fprintf(stderr, "\033[0;31m[ERROR]\033[0m::Failed to compile shader::%s\n", errorLog);
+		free(errorLog);
+		glDeleteShader(shader);
+		return false;
+	}
+	return shader;
 }

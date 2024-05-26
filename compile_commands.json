@@ -1,0 +1,74 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++11",
+      "-Wall",
+      "-ggdb",
+      "-I/usr/include",
+      "-I.",
+      "-DDEBUG",
+      "-c",
+      "-o",
+      "ask1/src/58633_11.o",
+      "ask1/src/58633_11.cpp"
+    ],
+    "directory": "/home/tasos/projects/cpp/OpenGL_Erg2",
+    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/ask1/src/58633_11.cpp",
+    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/ask1/src/58633_11.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c11",
+      "-Wall",
+      "-ggdb",
+      "-I/usr/include",
+      "-I.",
+      "-DDEBUG",
+      "-c",
+      "-o",
+      "lib/dbg_assert.o",
+      "lib/dbg_assert.c"
+    ],
+    "directory": "/home/tasos/projects/cpp/OpenGL_Erg2",
+    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/dbg_assert.c",
+    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/dbg_assert.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c11",
+      "-Wall",
+      "-ggdb",
+      "-I/usr/include",
+      "-I.",
+      "-DDEBUG",
+      "-c",
+      "-o",
+      "lib/shader_utl.o",
+      "lib/shader_utl.c"
+    ],
+    "directory": "/home/tasos/projects/cpp/OpenGL_Erg2",
+    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/shader_utl.c",
+    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/shader_utl.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-std=c11",
+      "-Wall",
+      "-ggdb",
+      "-I/usr/include",
+      "-I.",
+      "-DDEBUG",
+      "-c",
+      "-o",
+      "lib/windowGlfw.o",
+      "lib/windowGlfw.c"
+    ],
+    "directory": "/home/tasos/projects/cpp/OpenGL_Erg2",
+    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/windowGlfw.c",
+    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/windowGlfw.o"
+  }
+]

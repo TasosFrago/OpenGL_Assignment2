@@ -1,8 +1,15 @@
 #include <iostream>
 #include <cmath>
+#include <cstdint>
 
-#include "../../lib/windowGlfw.h"
-#include "../../lib/dbg_assert.h"
+#ifndef GLEW_GUARD_H
+#define GLEW_GUARD_H
+#include <GL/glew.h>
+#endif // GLEW_GUARD_H
+
+#include "lib/windowGlfw.h"
+#include "lib/dbg_assert.h"
+#include "lib/shader_utl.h"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -39,13 +46,40 @@ int main()
 		.height=HEIGHT
 	};
 	createWindow(&window);
-
 	DBG_ASSERT(window.win_ptr != NULL);
+
+	GLfloat vertices[] = {
+		-0.5f, -0.5f, 0.0f,
+		 0.5f, -0.5f, 0.0f,
+		 0.0f,  0.5f, 0.0f,
+	};
+
+	uint32_t VBO, VAO;
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	uint32_t shader = shaderLoadProgram("./shaders/testVertexShader.glsl", "./shaders/testFragmentShader.glsl");
+	DBG_ASSERT(shader != 0);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (const void *)0);
+	glEnableVertexAttribArray(0);
 
 	while(!glfwWindowShouldClose(window.win_ptr)) {
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		// shaderUse(shader);
+		glUseProgram(shader);
+		DBG_GLCHECKERROR();
+
+		glBindVertexArray(VAO);
+		DBG_GLCHECKERROR();
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+		DBG_GLCHECKERROR();
 
 		glfwSwapBuffers(window.win_ptr);
 		glfwPollEvents();
