@@ -12,6 +12,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+// Imgui
+#include "imgui.h"
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
+
 #include "polygon.h"
 
 #include "lib/windowGlfw.h"
@@ -43,6 +48,16 @@ int main()
 	glfwSetWindowUserPointer(window.win_ptr, (void *)&isPressed);
 	glfwSetKeyCallback(window.win_ptr, key_callback);
 
+	// Setub Imgui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+	// Setup Platform backends
+	ImGui_ImplGlfw_InitForOpenGL(window.win_ptr, true);
+	ImGui_ImplOpenGL3_Init();
+
 	struct PolygonIDs ids = getPolygonTypes(U);
 
 	// uint32_t shader = shaderLoadProgram("./shaders/testVertexShader.glsl", "./shaders/testFragmentShader.glsl");
@@ -52,6 +67,7 @@ int main()
 	VAO_t vao[2];
 
 	// First Polygon
+	// ------------
 	vaoGen(&vao[0]);
 	vaoBind(&vao[0]);
 
@@ -79,6 +95,7 @@ int main()
 	vbl_destroy(&vbl1);
 
 	// Second Polygon
+	// ------------
 	vaoGen(&vao[1]);
 	vaoBind(&vao[1]);
 
@@ -104,39 +121,26 @@ int main()
 	free(vbo2);
 	vbl_destroy(&vbl2);
 
-	// VAO_t vao;
-	// vaoGen(&vao);
-	// vaoBind(&vao);
-	// VBO_t vbo;
-	// vboGen(&vbo, vertices, sizeof(float) * len, GL_STATIC_DRAW);
-
-	// free(vertices);
-
-	// VBLayout_t vbl;
-	// vbl_new(&vbl, 3 * sizeof(float));
-	// vbl_push_float(&vbl, 3);
-
-	// vaoAddBuffer(&vao, &vbo, &vbl);
-	// DBG_GLCHECKERROR();
-
-	// vbl_destroy(&vbl);
-	//-------
-
-	// uint32_t VBO, VAO;
-	// glGenVertexArrays(1, &VAO);
-	// glBindVertexArray(VAO);
-
-	// glGenBuffers(1, &VBO);
-	// glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	// glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (len), vertices, GL_STATIC_DRAW);
-
-	// free(vertices);
-
-	// glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (const void *)0);
-	// glEnableVertexAttribArray(0);
-
 
 	while(!glfwWindowShouldClose(window.win_ptr)) {
+		glfwPollEvents();
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+		// ImGui::ShowDemoWindow();
+		ImGui::SeparatorText("Polygon 1");
+		static float R = 0, G = 1.0f, B = 0;
+		ImGui::SliderFloat("R", &R, 0.0f, 1.0f);
+		ImGui::SliderFloat("G", &G, 0.0f, 1.0f);
+		ImGui::SliderFloat("B", &B, 0.0f, 1.0f);
+
+		ImGui::SeparatorText("Polygon 2");
+		static float R1 = 1.0f, G1 = 0, B1 = 0;
+		ImGui::SliderFloat("R1", &R1, 0.0f, 1.0f);
+		ImGui::SliderFloat("G1", &G1, 0.0f, 1.0f);
+		ImGui::SliderFloat("B1", &B1, 0.0f, 1.0f);
+
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
@@ -147,7 +151,7 @@ int main()
 		vaoBind(&vao[0]);
 		DBG_GLCHECKERROR();
 
-		glUniform3f(glGetUniformLocation(shader, "overideColor"), 0, 1.0f, 0);
+		glUniform3f(glGetUniformLocation(shader, "overideColor"), R, G, B);
 		glDrawArrays(GL_TRIANGLES, 0, len1);
 		DBG_GLCHECKERROR();
 
@@ -156,15 +160,20 @@ int main()
 		vaoBind(&vao[1]);
 		DBG_GLCHECKERROR();
 
-		glUniform3f(glGetUniformLocation(shader, "overideColor"), 1.0f, 0, 0);
+		glUniform3f(glGetUniformLocation(shader, "overideColor"), R1, G1, B1);
 		glDrawArrays(GL_TRIANGLES, 0, len2);
 		DBG_GLCHECKERROR();
 
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		glfwSwapBuffers(window.win_ptr);
-		glfwPollEvents();
 	}
-	vaoDelete(&vao[0]);
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 
+	vaoDelete(&vao[0]);
+	vaoDelete(&vao[1]);
 	destroyWindow(&window);
 
 	return 0;
@@ -173,7 +182,7 @@ int main()
 
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
-	if(key == GLFW_KEY_TAB && action == GLFW_PRESS) {
+	if(key == GLFW_KEY_W && action == GLFW_PRESS) {
 		// Get the globall state of the <TAB> key
 		bool *isPressed;
 		isPressed = (bool *)glfwGetWindowUserPointer(window);

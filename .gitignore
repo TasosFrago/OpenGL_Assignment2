@@ -1,3 +1,7 @@
-main
+ASK1_TARGET
+ASK2_TARGET
+ASK3_TARGET
+ASK4_TARGET
 .cache
 *.o
+imgui.ini
