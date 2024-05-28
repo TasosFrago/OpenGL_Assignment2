@@ -28,7 +28,7 @@ void createWindow(window_t *window, GLFWkeyfun key_callback)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	window->win_ptr = glfwCreateWindow(window->width, window->height, "Conway's Game of Life", NULL, NULL);
+	window->win_ptr = glfwCreateWindow(window->width, window->height, "OpenGL Erg", NULL, NULL);
 
 	if(!window) {
 		fprintf(stderr, "Failed to initialize window.\n");

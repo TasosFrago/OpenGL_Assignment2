@@ -11,8 +11,11 @@ CXXFLAGS = -std=c++11 -Wall -ggdb
 # DEBUG = RELEASE
 DEBUG = DEBUG
 
-CXX_SRCS = ./ask1/src/58633_11.cpp \
-		   ./ask1/src/polygon.cpp
+ASK1_SRCS = ./ask1/src/58633_11.cpp \
+		    ./ask1/src/polygon.cpp
+
+ASK2_SRCS = ./ask2/src/58633_12.cpp \
+			./ask1/src/polygon.cpp
 
 LIB_SRCS = ./lib/dbg_assert.c \
 		   ./lib/shader_utl.c \
@@ -30,7 +33,9 @@ IMGUI_SRCS = ./$(IMGUI_DIR)/imgui.cpp \
 			 ./$(IMGUI_DIR)/backends/imgui_impl_glfw.cpp \
 			 ./$(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
 
-CXX_OBJS = $(CXX_SRCS:.cpp=.o)
+ASK1_OBJS = $(ASK1_SRCS:.cpp=.o)
+ASK2_OBJS = $(ASK2_SRCS:.cpp=.o)
+
 LIB_OBJS = $(LIB_SRCS:.c=.o)
 IMGUI_OBJS = $(IMGUI_SRCS:.cpp=.o)
 
@@ -46,29 +51,45 @@ CFLAGS += $(INCLUDES) $(LD_FLAGS) -D$(DEBUG)
 
 ASK1_TARGET = ASK1_TARGET
 ASK2_TARGET = ASK2_TARGET
+ASK3_TARGET = ASK3_TARGET
 
 ##---------------
 ## BUILD RULES
 ##---------------
 
+all: ask1T ask2T
+
+## Ask1 Build
 ask1T: $(ASK1_TARGET)
 
-$(ASK1_TARGET): $(CXX_OBJS) $(LIB_OBJS) $(IMGUI_OBJS)
+$(ASK1_TARGET): $(ASK1_OBJS) $(LIB_OBJS) $(IMGUI_OBJS)
 	$(CXX) -o $@ $^ $(CXXFLAGS)
 
+## Ask2 Build
+ask2T: $(ASK2_TARGET)
+
+$(ASK2_TARGET): $(ASK2_OBJS) $(LIB_OBJS) $(IMGUI_OBJS)
+	$(CXX) -o $@ $^ $(CXXFLAGS)
+
+
+## GENERAL BUILD RULES
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $^ -o $@
 
+##--------------------
 
-.PHONY: clean cleanImgui exec1
+.PHONY: clean cleanImgui exec1 exec2
 exec1:
 	./$(ASK1_TARGET)
 
+exec2:
+	./$(ASK2_TARGET)
+
 clean:
-	rm $(ASK1_TARGET_TARGET) $(LIB_OBJS) $(CXX_OBJS) imgui.ini
+	rm $(ASK1_TARGET) $(ASK2_TARGET) $(LIB_OBJS) $(CXX_OBJS) imgui.ini
 
 cleanImgui:
 	rm $(IMGUI_OBJS)

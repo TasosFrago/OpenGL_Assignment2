@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cmath>
 #include <cstdint>
 #include <cstring>
 
@@ -128,7 +127,7 @@ int main()
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-		// ImGui::ShowDemoWindow();
+		ImGui::Begin("Change Colors");
 		ImGui::SeparatorText("Polygon 1");
 		static float R = 0, G = 1.0f, B = 0;
 		ImGui::SliderFloat("R", &R, 0.0f, 1.0f);
@@ -140,6 +139,7 @@ int main()
 		ImGui::SliderFloat("R1", &R1, 0.0f, 1.0f);
 		ImGui::SliderFloat("G1", &G1, 0.0f, 1.0f);
 		ImGui::SliderFloat("B1", &B1, 0.0f, 1.0f);
+		ImGui::End();
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
