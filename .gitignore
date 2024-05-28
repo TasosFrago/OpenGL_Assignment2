@@ -5,3 +5,4 @@ ASK4_TARGET
 .cache
 *.o
 imgui.ini
+val-out.txt
