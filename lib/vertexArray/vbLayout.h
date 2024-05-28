@@ -38,7 +38,7 @@ typedef enum {
 	VBL_ARR_SHOULD_BE_EMPTY,
 } VBLayout_status_en;
 
-VBLayout_status_en vbl_new(VBLayout_t *vbl);
+VBLayout_status_en vbl_new(VBLayout_t *vbl, uint32_t stride);
 void vbl_destroy(VBLayout_t *vbl);
 
 VBLayout_status_en vbl_push_float(VBLayout_t *vbl, int32_t count);

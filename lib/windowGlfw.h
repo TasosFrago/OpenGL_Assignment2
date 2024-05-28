@@ -22,7 +22,7 @@ typedef struct {
 	int height;
 } window_t;
 
-void createWindow(window_t *window);
+void createWindow(window_t *window, GLFWkeyfun key_callback);
 void destroyWindow(window_t *window);
 
 #if defined(__cplusplus)

@@ -23,6 +23,8 @@ typedef uint32_t VAO_t;
 void vaoGen(VAO_t *vao);
 void vaoBind(VAO_t *vao);
 void vaoAddBuffer(VAO_t *vao, VBO_t *vbo, VBLayout_t *layout);
+/* void vaoAddBufferM(VAO_t *vao, VBO_t *vbo[], VBLayout_t *layout); */
+void vaoAddBufferM(VAO_t *vao, VBO_t vbo[], VBLayout_t *layout);
 void vaoDelete(VAO_t *vao);
 
 #if defined(__cplusplus)

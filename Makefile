@@ -4,15 +4,16 @@ CC = gcc
 CXX = g++
 
 # Compilers flags
-CFLAGS = -std=c11 -Wall -ggdb
-CXXFLAGS = -std=c++11 -Wall -ggdb
+CFLAGS = -std=c11 -Wall -ggdb 
+CXXFLAGS = -std=c++11 -Wall -ggdb 
 
 TARGET = main
 
 # DEBUG = RELEASE
 DEBUG = DEBUG
 
-CXX_SRCS = ./ask1/src/58633_11.cpp
+CXX_SRCS = ./ask1/src/58633_11.cpp \
+		   ./ask1/src/polygon.cpp
 
 C_SRCS = ./lib/dbg_assert.c \
 		 ./lib/shader_utl.c \

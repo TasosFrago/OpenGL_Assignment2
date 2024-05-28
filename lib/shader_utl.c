@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
 
 #include "shader_utl.h"
 #include "dbg_assert.h"
@@ -39,6 +38,12 @@ GLuint shaderLoadProgram(const char *vertexPath, const char *fragmentPath)
 	// Create fragmentSrc pointer to pass
 	char *fragmentSrc = NULL;
 	__readFile(&fragmentSrc, fragmentPath); // Get the code from the file
+	/* int vLength; */
+	/* int fLength; */
+
+	/* char *vertexSrc = __loadFile(vertexPath, &vLength); */
+	/* char *fragmentSrc = __loadFile(fragmentPath, &fLength); */
+
 
 	// Check return for errors
 	if(vertexSrc == NULL || fragmentSrc == NULL) {
@@ -67,26 +72,26 @@ static void __readFile(char **buffer, const char *filepath)
 
 	// Get the size of the file by getting the location of the cursor at the end of the file
 	fseek(file, 0, SEEK_END);
-	int64_t fileSize = ftell(file);
+	size_t fileSize = ftell(file);
 	// Move the cursor back at the begining
 	fseek(file, 0, SEEK_SET);
 
 	if(fileSize > 0) {
-		*buffer = (char *)malloc((fileSize + 1) * sizeof(char));
+		*buffer = (char *)malloc((fileSize + 2) * sizeof(char));
 		if(*buffer == NULL) {
 			fprintf(stderr, "\033[0;31m[ERROR]\033[0m::Failed to allocate memory for file: %s\n", filepath);
 			return;
 		}
 		// Read file
-		uint32_t count = fread(*buffer, sizeof(char), fileSize, file);
+		size_t count = fread(*buffer, sizeof(char), fileSize, file);
 
 		// Correct buffer size accounting for \r\n characters
 		if(count < fileSize) {
-			*buffer = realloc(*buffer, count + 1);
+			*buffer = realloc(*buffer, (count + 2) * sizeof(char));
 		}
 
 		// Terminate buffer
-		*buffer[count] = '\0';
+		(*buffer)[count] = '\0';
 	}
 	fclose(file);
 }

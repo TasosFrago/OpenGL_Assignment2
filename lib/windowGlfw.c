@@ -5,17 +5,9 @@
 #include "dbg_assert.h"
 
 
-void FrameBufferSizeCallback(GLFWwindow *, int width, int height)
+void FrameBufferSizeCallback(GLFWwindow *fun, int width, int height)
 {
 	glViewport(0, 0, width, height);
-}
-
-void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
-{
-	// Closs Window with ESC
-	if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-		glfwSetWindowShouldClose(window, 1);
-	}
 }
 
 void error_callback(int error, const char *description)
@@ -23,7 +15,7 @@ void error_callback(int error, const char *description)
 	DBG_LOG(description, ERROR);
 }
 
-void createWindow(window_t *window)
+void createWindow(window_t *window, GLFWkeyfun key_callback)
 {
 	window->win_ptr = 0;
 	DBG_ASSERT(window->width > 100 && window->height >100);

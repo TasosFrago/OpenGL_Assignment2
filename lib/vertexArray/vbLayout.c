@@ -6,17 +6,16 @@
 #define VBL_ARR_DEFAULT_SIZE 9
 
 
-VBLayout_status_en vbl_new(VBLayout_t *vbl)
+VBLayout_status_en vbl_new(VBLayout_t *vbl, uint32_t stride)
 {
-	if(vbl != NULL) {
-		return VBL_ARR_SHOULD_BE_EMPTY;
-	}
+	/* if(vbl != NULL) { */
+	/* 	return VBL_ARR_SHOULD_BE_EMPTY; */
+	/* } */
 
-	vbl->stride = 0;
+	vbl->stride = stride;
 	vbl->capacity = VBL_ARR_DEFAULT_SIZE;
 	vbl->size = 0;
 	vbl->elements = malloc(VBL_ARR_DEFAULT_SIZE * sizeof(VBLayout_Element_t));
-	printf("%lu\n", vbl->capacity);
 
 	return VBL_STATUS_OK;
 }
@@ -35,7 +34,7 @@ VBLayout_status_en vbl_push_float(VBLayout_t *vbl, int32_t count)
 	// Check if full array to reallocate
 	if(vbl->size == vbl->capacity) {
 		vbl->capacity *= 2;
-		vbl->elements = realloc(vbl->elements, vbl->capacity * sizeof(VBLayout_Element_t));
+		vbl->elements = realloc(vbl->elements, (vbl->capacity) * sizeof(VBLayout_Element_t));
 	}
 
 	// Add new element
@@ -47,8 +46,6 @@ VBLayout_status_en vbl_push_float(VBLayout_t *vbl, int32_t count)
 	};
 	// Then increament the size
 	++vbl->size;
-
-	vbl->stride = sizeof(float) * count;
 
 	return VBL_STATUS_OK;
 }
@@ -75,8 +72,6 @@ VBLayout_status_en vbl_push_uint(VBLayout_t *vbl, int32_t count)
 	// Then increament the size
 	++vbl->size;
 
-	vbl->stride = sizeof(uint32_t) * count;
-
 	return VBL_STATUS_OK;
 }
 
@@ -101,8 +96,6 @@ VBLayout_status_en vbl_push_uchar(VBLayout_t *vbl, int32_t count)
 	};
 	// Then increament the size
 	++vbl->size;
-
-	vbl->stride = sizeof(unsigned char) * count;
 
 	return VBL_STATUS_OK;
 }
