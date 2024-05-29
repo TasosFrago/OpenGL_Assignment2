@@ -1,25 +1,6 @@
 [
   {
     "arguments": [
-      "/usr/bin/g++",
-      "-std=c++11",
-      "-Wall",
-      "-ggdb",
-      "-I/usr/include",
-      "-I.",
-      "-I./imgui",
-      "-DDEBUG",
-      "-c",
-      "-o",
-      "ask1/src/polygon.o",
-      "ask1/src/polygon.cpp"
-    ],
-    "directory": "/home/tasos/projects/cpp/OpenGL_Erg2",
-    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/ask1/src/polygon.cpp",
-    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/ask1/src/polygon.o"
-  },
-  {
-    "arguments": [
       "/usr/bin/gcc",
       "-std=c11",
       "-Wall",
@@ -30,31 +11,12 @@
       "-DDEBUG",
       "-c",
       "-o",
-      "lib/shader_utl.o",
-      "lib/shader_utl.c"
+      "lib/dbg_assert.o",
+      "lib/dbg_assert.c"
     ],
     "directory": "/home/tasos/projects/cpp/OpenGL_Erg2",
-    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/shader_utl.c",
-    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/shader_utl.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/g++",
-      "-std=c++11",
-      "-Wall",
-      "-ggdb",
-      "-I/usr/include",
-      "-I.",
-      "-I./imgui",
-      "-DDEBUG",
-      "-c",
-      "-o",
-      "ask1/src/58633_11.o",
-      "ask1/src/58633_11.cpp"
-    ],
-    "directory": "/home/tasos/projects/cpp/OpenGL_Erg2",
-    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/ask1/src/58633_11.cpp",
-    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/ask1/src/58633_11.o"
+    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/dbg_assert.c",
+    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/dbg_assert.o"
   },
   {
     "arguments": [
@@ -87,31 +49,12 @@
       "-DDEBUG",
       "-c",
       "-o",
-      "lib/dbg_assert.o",
-      "lib/dbg_assert.c"
+      "lib/shader_utl.o",
+      "lib/shader_utl.c"
     ],
     "directory": "/home/tasos/projects/cpp/OpenGL_Erg2",
-    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/dbg_assert.c",
-    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/dbg_assert.o"
-  },
-  {
-    "arguments": [
-      "/usr/bin/gcc",
-      "-std=c11",
-      "-Wall",
-      "-ggdb",
-      "-I/usr/include",
-      "-I.",
-      "-I./imgui",
-      "-DDEBUG",
-      "-c",
-      "-o",
-      "lib/vertexArray/vao.o",
-      "lib/vertexArray/vao.c"
-    ],
-    "directory": "/home/tasos/projects/cpp/OpenGL_Erg2",
-    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/vertexArray/vao.c",
-    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/vertexArray/vao.o"
+    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/shader_utl.c",
+    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/shader_utl.o"
   },
   {
     "arguments": [
@@ -144,17 +87,17 @@
       "-DDEBUG",
       "-c",
       "-o",
-      "lib/vertexArray/vbo.o",
-      "lib/vertexArray/vbo.c"
+      "lib/vertexArray/vao.o",
+      "lib/vertexArray/vao.c"
     ],
     "directory": "/home/tasos/projects/cpp/OpenGL_Erg2",
-    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/vertexArray/vbo.c",
-    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/vertexArray/vbo.o"
+    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/vertexArray/vao.c",
+    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/vertexArray/vao.o"
   },
   {
     "arguments": [
-      "/usr/bin/g++",
-      "-std=c++11",
+      "/usr/bin/gcc",
+      "-std=c11",
       "-Wall",
       "-ggdb",
       "-I/usr/include",
@@ -163,12 +106,12 @@
       "-DDEBUG",
       "-c",
       "-o",
-      "imgui/imgui.o",
-      "imgui/imgui.cpp"
+      "lib/vertexArray/vbo.o",
+      "lib/vertexArray/vbo.c"
     ],
     "directory": "/home/tasos/projects/cpp/OpenGL_Erg2",
-    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/imgui/imgui.cpp",
-    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/imgui/imgui.o"
+    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/vertexArray/vbo.c",
+    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/lib/vertexArray/vbo.o"
   },
   {
     "arguments": [
@@ -201,12 +144,12 @@
       "-DDEBUG",
       "-c",
       "-o",
-      "imgui/imgui_draw.o",
-      "imgui/imgui_draw.cpp"
+      "imgui/imgui.o",
+      "imgui/imgui.cpp"
     ],
     "directory": "/home/tasos/projects/cpp/OpenGL_Erg2",
-    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/imgui/imgui_draw.cpp",
-    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/imgui/imgui_draw.o"
+    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/imgui/imgui.cpp",
+    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/imgui/imgui.o"
   },
   {
     "arguments": [
@@ -245,6 +188,25 @@
     "directory": "/home/tasos/projects/cpp/OpenGL_Erg2",
     "file": "/home/tasos/projects/cpp/OpenGL_Erg2/imgui/imgui_widgets.cpp",
     "output": "/home/tasos/projects/cpp/OpenGL_Erg2/imgui/imgui_widgets.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-std=c++11",
+      "-Wall",
+      "-ggdb",
+      "-I/usr/include",
+      "-I.",
+      "-I./imgui",
+      "-DDEBUG",
+      "-c",
+      "-o",
+      "imgui/imgui_draw.o",
+      "imgui/imgui_draw.cpp"
+    ],
+    "directory": "/home/tasos/projects/cpp/OpenGL_Erg2",
+    "file": "/home/tasos/projects/cpp/OpenGL_Erg2/imgui/imgui_draw.cpp",
+    "output": "/home/tasos/projects/cpp/OpenGL_Erg2/imgui/imgui_draw.o"
   },
   {
     "arguments": [

@@ -17,6 +17,8 @@ ASK1_SRCS = ./ask1/src/58633_11.cpp \
 ASK2_SRCS = ./ask2/src/58633_12.cpp \
 			./ask1/src/polygon.cpp
 
+ASK3_SRCS = ./ask3/src/58633_13.cpp
+
 LIB_SRCS = ./lib/dbg_assert.c \
 		   ./lib/shader_utl.c \
 		   ./lib/windowGlfw.c \
@@ -35,6 +37,7 @@ IMGUI_SRCS = ./$(IMGUI_DIR)/imgui.cpp \
 
 ASK1_OBJS = $(ASK1_SRCS:.cpp=.o)
 ASK2_OBJS = $(ASK2_SRCS:.cpp=.o)
+ASK3_OBJS = $(ASK3_SRCS:.cpp=.o)
 
 LIB_OBJS = $(LIB_SRCS:.c=.o)
 IMGUI_OBJS = $(IMGUI_SRCS:.cpp=.o)
@@ -57,7 +60,7 @@ ASK3_TARGET = ASK3_TARGET
 ## BUILD RULES
 ##---------------
 
-all: ask1T ask2T
+all: ask1T ask2T ask3T
 
 ## Ask1 Build
 ask1T: $(ASK1_TARGET)
@@ -71,6 +74,11 @@ ask2T: $(ASK2_TARGET)
 $(ASK2_TARGET): $(ASK2_OBJS) $(LIB_OBJS) $(IMGUI_OBJS)
 	$(CXX) -o $@ $^ $(CXXFLAGS)
 
+## Ask3 Build
+ask3T: $(ASK3_TARGET)
+
+$(ASK3_TARGET): $(ASK3_OBJS) $(LIB_OBJS) $(IMGUI_OBJS)
+	$(CXX) -o $@ $^ $(CXXFLAGS)
 
 ## GENERAL BUILD RULES
 %.o: %.cpp
@@ -81,12 +89,17 @@ $(ASK2_TARGET): $(ASK2_OBJS) $(LIB_OBJS) $(IMGUI_OBJS)
 
 ##--------------------
 
-.PHONY: clean cleanImgui exec1 exec2
+.PHONY: clean cleanImgui exec1 exec2 exec3
 exec1:
 	./$(ASK1_TARGET)
 
 exec2:
 	./$(ASK2_TARGET)
+
+exec3:
+	./$(ASK3_TARGET)
+
+cleanAll: clean cleanImgui
 
 clean:
 	rm $(ASK1_TARGET) $(ASK2_TARGET) $(LIB_OBJS) $(CXX_OBJS) imgui.ini
