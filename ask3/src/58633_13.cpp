@@ -26,16 +26,35 @@
 #define WIDTH 800
 #define HEIGHT 800
 
+#define A (1.6f)
+#define B (1.3f)
+#define C (1.3f)
+
+#define SCALE_M(S) glm::vec3(S, S, S)
+
+
 
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
 
-glm::mat4 updateModelTrans1(float speed1, float speed2, bool rotation1, bool rotation2, float deltaTime, float radius, glm::mat4 &rotationTrans, glm::mat4 &spinTrans)
+struct CubeRotationAttribs {
+	float RotationSpeed;
+	float SpinSpeed;
+	bool RotationToggle;
+	bool SpinToggle;
+	float RotationRadius;
+	glm::mat4& rotationTrans;
+	glm::mat4& spinTrans;
+	glm::vec3 scaleVec;
+	float deltaTime;
+};
+
+glm::mat4 updateModelTrans1(float speed1, float speed2, bool rotation1, bool rotation2, float deltaTime, float radius, glm::mat4 &rotationTrans, glm::mat4 &spinTrans, glm::vec3 scale)
 {
 	glm::mat4 identity(1.0f);
 	glm::mat4 model2Spin = glm::rotate(identity, speed2 * deltaTime, glm::vec3(0.0f, 0.0f, 1.0f));
 	glm::mat4 model2Rotation = glm::rotate(identity, speed1 * deltaTime, glm::vec3(0.0f, 0.0f, 1.0f));
-	glm::mat4 model2Trans = glm::translate(identity, glm::vec3(radius, 0.0f, 0.0f));
-	glm::mat4 model2Scale = glm::scale(identity, glm::vec3(0.5f, 0.5f, 0.5f));
+	glm::mat4 model2Trans = glm::translate(identity, glm::vec3(radius + 2.0f, 0.0f, 0.0f));
+	glm::mat4 model2Scale = glm::scale(identity, scale);
 
 	if(rotation1) {
 		rotationTrans = model2Rotation * rotationTrans;
@@ -191,20 +210,19 @@ int main()
 	float deltaTime = 0.0f;
 	float lastFrame = 0.0f;
 
-	glm::mat4 model1, model2 = identity, rotation1;
 	float modelSpeed[5] = { 2.4f, 2.4f, 2.4f, 2.4f, 2.4f};
 	bool rotation[5] = { 1, 1, 1, 1, 1 };
 	float radius12 = 5.0f;
 	float radius23 = 0.1f;
+
 	glm::mat4 currentTrans = identity;
 	glm::mat4 currentTrans2 = identity;
 	glm::mat4 currentTrans3 = identity;
 	glm::mat4 currentTrans4 = identity;
 
-	glm::mat4 currTrans2;
-	glm::mat4 model2Tmp;
 	glm::mat4 model2Trans1 = identity;
 	glm::mat4 model2Trans2 = identity;
+	glm::mat4 model1Trans = identity;
 
 	while(!glfwWindowShouldClose(window.win_ptr)) {
 		glfwPollEvents();
@@ -239,50 +257,54 @@ int main()
 		DBG_GLCHECKERROR();
 
 		vaoBind(&vao);
-
+		DBG_GLCHECKERROR();
 
 		glm::mat4 view;
-		view = glm::translate(identity, glm::vec3(0.0f, 0.0f, -3.0f));
+		view = glm::translate(identity, glm::vec3(0.0f, 0.0f, -13.0f));
 		glUniformMatrix4fv(glGetUniformLocation(shader, "view"), 1, GL_FALSE, &view[0][0]);
 
-		// 3D projection
 		glm::mat4 projection;
+
+		// 3D projection
 		projection = glm::perspective(glm::radians(90.0f), (float)(WIDTH)/(float)(HEIGHT), 0.1f, 100.0f);
 
 		// 2D projection
-		// projection = glm::ortho(-5.0f, 5.0f, -6.0f, 6.0f, -15.0f, 18.0f); // the values were chosen to fit the cube positions in each axis
+		// projection = glm::ortho(-40.0f, 40.0f, -40.0f, 40.0f, -13.0f, 13.0f); // the values were chosen to fit the cube positions in each axis
+
 		glUniformMatrix4fv(glGetUniformLocation(shader, "projection"), 1, GL_FALSE, &projection[0][0]);
 
 
-		// Model1
-		glm::mat4 model1Trans = glm::translate(identity, glm::vec3(0, 0, 0));
-		glm::mat4 model1Spin = glm::rotate(identity, modelSpeed[0] * currentTime, glm::vec3(0.0f, 0.0f, 1.0f));
-		glm::mat4 model1Scale = glm::scale(identity, glm::vec3(0.5f, 0.5f, 0.5f));
+		//******Model-1******
+		{
+			glm::mat4 tmp(1.0f);
+			glm::mat4 model1 = updateModelTrans1(1.0f, modelSpeed[0], 0, rotation[0], deltaTime, -2.0f, tmp, model1Trans, SCALE_M(A));
 
-		if(rotation[0]) {
-			model1 = model1Scale * model1Spin * model1Trans;
-		} else {
-			model1 = model1Scale * model1Trans;
+			glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, &model1[0][0]);
+			glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(vertices[0]));
 		}
 
-		glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, &model1[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(vertices[0]));
+		//******Model-2******
+		{
+			glm::mat4 model2 = updateModelTrans1(modelSpeed[1], modelSpeed[2], rotation[1], rotation[2], deltaTime, radius12, currentTrans, currentTrans2, SCALE_M(B));
 
-		//******Model 2******
-		model2 = updateModelTrans1(modelSpeed[1], modelSpeed[2], rotation[1], rotation[2], deltaTime, radius12, currentTrans, currentTrans2);
+			glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, &model2[0][0]);
+			// Draw the model
+			glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(vertices[0]));
+		}
 
-		glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, &model2[0][0]);
-		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(vertices[0]));
+		//******Model-3******
+		{
+			/*
+			 * Recompute the matrix of model 2 but with the spin disabled,
+			 * and without the scale so it doesn't add up to model3's tansformation
+			 */
+			glm::mat4 model2Tmp = updateModelTrans1(modelSpeed[1], modelSpeed[2], rotation[1], 0, deltaTime, radius12, model2Trans1, model2Trans2, SCALE_M(B)) * glm::inverse(glm::scale(identity, SCALE_M(B)));
 
-		model2Tmp = updateModelTrans1(modelSpeed[1], modelSpeed[2], rotation[1], 0, deltaTime, radius12, model2Trans1, model2Trans2);
+			glm::mat4 model3 = model2Tmp * updateModelTrans1(modelSpeed[3], modelSpeed[4], rotation[3], rotation[4], deltaTime, radius23, currentTrans3, currentTrans4, SCALE_M(C));
 
-		glm::mat4 model3 = model2Tmp * updateModelTrans1(modelSpeed[3], modelSpeed[4], rotation[3], rotation[4], deltaTime, radius23, currentTrans3, currentTrans4);
-
-		// glm::mat4 model3 = model2Tmp * model3Scale * currentTrans3 * model3Trans * currentTrans4;
-
-		glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, &model3[0][0]);
-
-		glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(vertices[0]));
+			glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, &model3[0][0]);
+			glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(vertices[0]));
+		}
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
