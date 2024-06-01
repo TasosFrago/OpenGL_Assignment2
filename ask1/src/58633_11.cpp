@@ -59,7 +59,6 @@ int main()
 
 	struct PolygonIDs ids = getPolygonTypes(U);
 
-	// uint32_t shader = shaderLoadProgram("./shaders/testVertexShader.glsl", "./shaders/testFragmentShader.glsl");
 	uint32_t shader = shaderLoadProgram("./ask1/shaders/VertexShader_11.glsl", "./ask1/shaders/FragmentShader_11.glsl");
 	DBG_ASSERT(shader != 0);
 

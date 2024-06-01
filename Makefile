@@ -4,8 +4,9 @@ CC = gcc
 CXX = g++
 
 # Compilers flags
-CFLAGS = -std=c11 -Wall -ggdb 
-CXXFLAGS = -std=c++11 -Wall -ggdb 
+FLAGS = -Wall -ggdb `pkg-config --cflags glfw3 glew`
+CFLAGS = -std=c11 $(FLAGS)
+CXXFLAGS = -std=c++11 -Wall $(FLAGS)
 
 
 # DEBUG = RELEASE
@@ -46,7 +47,8 @@ INCLUDES = -I/usr/include -I. -I$(IMGUI_DIR)
 
 LIB_DIRS = -L/usr/lib
 
-LD_FLAGS = $(LIB_DIRS) -lglfw -lrt -lm -ldl -lGLEW -lGL -lXrandr -lXi -lX11
+# LD_FLAGS = $(LIB_DIRS) -lglfw -lrt -lm -ldl -lGLEW -lGL -lXrandr -lXi -lX11
+LD_FLAGS = $(LIB_DIRS)  `pkg-config --libs glfw3 glew`
 
 CXXFLAGS += $(INCLUDES) $(LD_FLAGS) -D$(DEBUG)
 CFLAGS += $(INCLUDES) $(LD_FLAGS) -D$(DEBUG)
