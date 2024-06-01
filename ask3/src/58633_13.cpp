@@ -33,6 +33,50 @@
 #define SCALE_M(S) glm::vec3(S, S, S)
 
 
+static GLfloat vertices[] = {
+	//position           //color
+	-0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0,
+	0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0,
+	0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0,
+	0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0,
+	-0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0,
+	-0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0,
+
+	-0.5f, -0.5f,  0.5f, 0.0f, 1.0f, 0.0,
+	0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0,
+	0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0,
+	0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0,
+	-0.5f,  0.5f,  0.5f, 0.0f, 1.0f, 0.0,
+	-0.5f, -0.5f,  0.5f, 0.0f, 1.0f, 0.0,
+
+	-0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+	-0.5f,  0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+
+	0.5f,  0.5f,  0.5f,  0.0f, 0.5f, 0.0f,
+	0.5f,  0.5f, -0.5f,  0.0f, 0.5f, 0.0f,
+	0.5f, -0.5f, -0.5f,  0.0f, 0.5f, 0.0f,
+	0.5f, -0.5f, -0.5f,  0.0f, 0.5f, 0.0f,
+	0.5f, -0.5f,  0.5f,  0.0f, 0.5f, 0.0f,
+	0.5f,  0.5f,  0.5f,  0.0f, 0.5f, 0.0f,
+
+	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.5f,
+	0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.5f,
+	0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.5f,
+	0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.5f,
+	-0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 0.5f,
+	-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.5f,
+
+	-0.5f,  0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+	0.5f,  0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
+	0.5f,  0.5f,  0.5f,  0.5f, 0.0f, 0.0f,
+	0.5f,  0.5f,  0.5f,  0.5f, 0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f, 0.5f, 0.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f, 0.5f, 0.0f, 0.0f
+};
 
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
 
@@ -42,24 +86,20 @@ struct CubeRotationAttribs {
 	bool RotationToggle;
 	bool SpinToggle;
 	float RotationRadius;
-	glm::mat4& rotationTrans;
-	glm::mat4& spinTrans;
 	glm::vec3 scaleVec;
-	float deltaTime;
 };
-
-glm::mat4 updateModelTrans1(float speed1, float speed2, bool rotation1, bool rotation2, float deltaTime, float radius, glm::mat4 &rotationTrans, glm::mat4 &spinTrans, glm::vec3 scale)
+glm::mat4 updateModelTrans(CubeRotationAttribs attrb, glm::mat4 &rotationTrans, glm::mat4 &spinTrans, float deltaTime)
 {
 	glm::mat4 identity(1.0f);
-	glm::mat4 model2Spin = glm::rotate(identity, speed2 * deltaTime, glm::vec3(0.0f, 0.0f, 1.0f));
-	glm::mat4 model2Rotation = glm::rotate(identity, speed1 * deltaTime, glm::vec3(0.0f, 0.0f, 1.0f));
-	glm::mat4 model2Trans = glm::translate(identity, glm::vec3(radius + 2.0f, 0.0f, 0.0f));
-	glm::mat4 model2Scale = glm::scale(identity, scale);
+	glm::mat4 model2Spin = glm::rotate(identity, attrb.SpinSpeed * deltaTime, glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::mat4 model2Rotation = glm::rotate(identity, attrb.RotationSpeed * deltaTime, glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::mat4 model2Trans = glm::translate(identity, glm::vec3(attrb.RotationRadius + 2.0f, 0.0f, 0.0f));
+	glm::mat4 model2Scale = glm::scale(identity, attrb.scaleVec);
 
-	if(rotation1) {
+	if(attrb.RotationToggle) {
 		rotationTrans = model2Rotation * rotationTrans;
 	}
-	if(rotation2) {
+	if(attrb.SpinToggle) {
 		spinTrans = model2Spin * spinTrans;
 	}
 	return (model2Scale * rotationTrans * model2Trans * spinTrans);
@@ -93,114 +133,23 @@ int main()
 	uint32_t shader = shaderLoadProgram("./ask3/shaders/VertexShader_13.glsl", "./ask3/shaders/FragmentShader_13.glsl");
 	DBG_ASSERT(shader != 0);
 
-	GLfloat vertices[] = {
-		//position
-		-0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f,  0.5f, -0.5f,
-		0.5f,  0.5f, -0.5f,
-		-0.5f,  0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-
-		-0.5f, -0.5f,  0.5f,
-		0.5f, -0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-		-0.5f, -0.5f,  0.5f,
-
-		-0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-
-		0.5f,  0.5f,  0.5f,
-		0.5f,  0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-
-		-0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f,  0.5f,
-		0.5f, -0.5f,  0.5f,
-		-0.5f, -0.5f,  0.5f,
-		-0.5f, -0.5f, -0.5f,
-
-		-0.5f,  0.5f, -0.5f,
-		0.5f,  0.5f, -0.5f,
-		0.5f,  0.5f,  0.5f,
-		0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f, -0.5f
-	};
-
-	GLfloat colors[] = {
-		//color
-		1.0f, 0.0f, 0.0,
-		1.0f, 0.0f, 0.0,
-		1.0f, 0.0f, 0.0,
-		1.0f, 0.0f, 0.0,
-		1.0f, 0.0f, 0.0,
-		1.0f, 0.0f, 0.0,
-
-		0.0f, 1.0f, 0.0,
-		0.0f, 1.0f, 0.0,
-		0.0f, 1.0f, 0.0,
-		0.0f, 1.0f, 0.0,
-		0.0f, 1.0f, 0.0,
-		0.0f, 1.0f, 0.0,
-
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-
-		0.0f, 0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f,
-
-		0.0f, 0.0f, 0.5f,
-		0.0f, 0.0f, 0.5f,
-		0.0f, 0.0f, 0.5f,
-		0.0f, 0.0f, 0.5f,
-		0.0f, 0.0f, 0.5f,
-		0.0f, 0.0f, 0.5f,
-
-		0.5f, 0.0f, 0.0f,
-		0.5f, 0.0f, 0.0f,
-		0.5f, 0.0f, 0.0f,
-		0.5f, 0.0f, 0.0f,
-		0.5f, 0.0f, 0.0f,
-		0.5f, 0.0f, 0.0f
-	};
-
 	VAO_t vao;
 	vaoGen(&vao);
 	vaoBind(&vao);
 
-	VBO_t *vbo = (VBO_t *)malloc(sizeof(VBO_t) * 2);
-	vboGen(&vbo[0], vertices, sizeof(vertices), GL_STATIC_DRAW);
-	vboGen(&vbo[1], colors, sizeof(colors), GL_STATIC_DRAW);
+	VBO_t vbo;
+	vboGen(&vbo, vertices, sizeof(vertices), GL_STATIC_DRAW);
 
 	VBLayout_t vbl;
-	vbl_new(&vbl, 3 * sizeof(float));
+	vbl_new(&vbl, 6 * sizeof(float));
 	vbl_push_float(&vbl, 3);
 	vbl_push_float(&vbl, 3);
 
-	vaoAddBufferM(&vao, vbo, &vbl);
+	vaoAddBuffer(&vao, &vbo, &vbl);
 	DBG_GLCHECKERROR();
 
 	vbl_destroy(&vbl);
-	free(vbo);
+	// free(vbo);
 
 	glm::mat4 identity = glm::mat4(1.0f);
 
@@ -214,8 +163,10 @@ int main()
 	bool rotation[5] = { 1, 1, 1, 1, 1 };
 	float radius12 = 5.0f;
 	float radius23 = 0.1f;
+	static int cameraPos = 1;
+	static float zoom = 90.0f;
 
-	glm::mat4 currentTrans = identity;
+	glm::mat4 currentTrans1 = identity;
 	glm::mat4 currentTrans2 = identity;
 	glm::mat4 currentTrans3 = identity;
 	glm::mat4 currentTrans4 = identity;
@@ -247,6 +198,11 @@ int main()
 				ImGui::SameLine();
 				ImGui::Checkbox(label2.c_str(), &rotation[i]);
 			}
+			ImGui::SeparatorText("Camera");
+			ImGui::RadioButton("Orthographic view", &cameraPos, 0);
+			ImGui::RadioButton("Projection 1", &cameraPos, 1); ImGui::SameLine();
+			ImGui::RadioButton("Projection 2", &cameraPos, 2);
+			ImGui::DragFloat("zoom", &zoom, 5.0f, 5.0f, 160.0f);
 			ImGui::End();
 		}
 
@@ -260,16 +216,31 @@ int main()
 		DBG_GLCHECKERROR();
 
 		glm::mat4 view;
-		view = glm::translate(identity, glm::vec3(0.0f, 0.0f, -13.0f));
-		glUniformMatrix4fv(glGetUniformLocation(shader, "view"), 1, GL_FALSE, &view[0][0]);
 
 		glm::mat4 projection;
 
-		// 3D projection
-		projection = glm::perspective(glm::radians(90.0f), (float)(WIDTH)/(float)(HEIGHT), 0.1f, 100.0f);
-
+		switch(cameraPos) {
 		// 2D projection
-		// projection = glm::ortho(-40.0f, 40.0f, -40.0f, 40.0f, -13.0f, 13.0f); // the values were chosen to fit the cube positions in each axis
+		case 0:
+			// the values were chosen to fit the cube positions in each axis
+			view = glm::translate(identity, glm::vec3(0.0f, 0.0f, -13.0f));
+			projection = glm::ortho(-40.0f, 40.0f, -40.0f, 40.0f, -13.0f, 13.0f);
+			break;
+		// 3D projection
+		case 1:
+			view = glm::translate(identity, glm::vec3(0.0f, 0.0f, -13.0f));
+			projection = glm::perspective(glm::radians(zoom), (float)(WIDTH)/(float)(HEIGHT), 0.1f, 100.0f);
+			break;
+		case 2:
+			glm::vec3 cameraPos = glm::vec3(-10.0f, 0.0f, 13.0f);
+			glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+			glm::vec3 cameraUp = glm::vec3(1.0f, 0.0f, 0.0f);
+			view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
+			projection = glm::perspective(glm::radians(zoom), (float)(WIDTH)/(float)(HEIGHT), 0.1f, 100.0f);
+			break;
+		}
+
+		glUniformMatrix4fv(glGetUniformLocation(shader, "view"), 1, GL_FALSE, &view[0][0]);
 
 		glUniformMatrix4fv(glGetUniformLocation(shader, "projection"), 1, GL_FALSE, &projection[0][0]);
 
@@ -277,7 +248,14 @@ int main()
 		//******Model-1******
 		{
 			glm::mat4 tmp(1.0f);
-			glm::mat4 model1 = updateModelTrans1(1.0f, modelSpeed[0], 0, rotation[0], deltaTime, -2.0f, tmp, model1Trans, SCALE_M(A));
+			glm::mat4 model1 = updateModelTrans((CubeRotationAttribs){
+								.RotationSpeed=1.0f,
+								.SpinSpeed=modelSpeed[0],
+								.RotationToggle=false,
+								.SpinToggle=rotation[0],
+								.RotationRadius=(-2.0f),
+								.scaleVec=SCALE_M(A)
+							}, tmp, model1Trans, deltaTime);
 
 			glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, &model1[0][0]);
 			glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(vertices[0]));
@@ -285,7 +263,14 @@ int main()
 
 		//******Model-2******
 		{
-			glm::mat4 model2 = updateModelTrans1(modelSpeed[1], modelSpeed[2], rotation[1], rotation[2], deltaTime, radius12, currentTrans, currentTrans2, SCALE_M(B));
+			glm::mat4 model2 = updateModelTrans((CubeRotationAttribs){
+								.RotationSpeed=modelSpeed[1],
+								.SpinSpeed=modelSpeed[2],
+								.RotationToggle=rotation[1],
+								.SpinToggle=rotation[2],
+								.RotationRadius=radius12,
+								.scaleVec=SCALE_M(B)
+							}, currentTrans1, currentTrans2, deltaTime);
 
 			glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, &model2[0][0]);
 			// Draw the model
@@ -298,9 +283,24 @@ int main()
 			 * Recompute the matrix of model 2 but with the spin disabled,
 			 * and without the scale so it doesn't add up to model3's tansformation
 			 */
-			glm::mat4 model2Tmp = updateModelTrans1(modelSpeed[1], modelSpeed[2], rotation[1], 0, deltaTime, radius12, model2Trans1, model2Trans2, SCALE_M(B)) * glm::inverse(glm::scale(identity, SCALE_M(B)));
+			glm::mat4 model2Tmp = updateModelTrans((CubeRotationAttribs){
+									.RotationSpeed=modelSpeed[1],
+									.SpinSpeed=0,
+									.RotationToggle=rotation[1],
+									.SpinToggle=0,
+									.RotationRadius=radius12,
+									.scaleVec=SCALE_M(B)
+								}, model2Trans1, model2Trans2, deltaTime);
+			model2Tmp *= glm::inverse(glm::scale(identity, SCALE_M(B)));
 
-			glm::mat4 model3 = model2Tmp * updateModelTrans1(modelSpeed[3], modelSpeed[4], rotation[3], rotation[4], deltaTime, radius23, currentTrans3, currentTrans4, SCALE_M(C));
+			glm::mat4 model3 = model2Tmp * updateModelTrans((CubeRotationAttribs){
+										.RotationSpeed=modelSpeed[3],
+										.SpinSpeed=modelSpeed[4],
+										.RotationToggle=rotation[3],
+										.SpinToggle=rotation[4],
+										.RotationRadius=radius23,
+										.scaleVec=SCALE_M(C)
+									}, currentTrans3, currentTrans4, deltaTime);
 
 			glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, &model3[0][0]);
 			glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/sizeof(vertices[0]));
