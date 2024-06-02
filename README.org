@@ -4,60 +4,60 @@
 
 #+begin_src shell
 .
-├── 58633.zip							// Zip that was uploaded to eclass
-├── ask1								// Ask1 Directory
-│   ├── shaders							// Ask1 Shader Directory
-│   │   ├── FragmentShader_11.glsl		// Fragment Shader
-│   │   └── VertexShader_11.glsl		// Vertex Shader
-│   └── src								// Ask1 src Directory
-│       ├── 58633_11.cpp				// Ask1 main
-│       ├── polygon.cpp					// Calculates the polygon vertices based on the AEM
+├── 58633.zip                       # Zip that was uploaded to eclass
+├── ask1                            # Ask1 Directory
+│   ├── shaders                     # Ask1 Shader Directory
+│   │   ├── FragmentShader_11.glsl  # Fragment Shader
+│   │   └── VertexShader_11.glsl    # Vertex Shader
+│   └── src                         # Ask1 src Directory
+│       ├── 58633_11.cpp            # Ask1 main
+│       ├── polygon.cpp             # Calculates the polygon vertices
 │       └── polygon.h
 │
-├── ask2								// Ask2 Directory                                     
-│   ├── shaders                         // Ask2 Shader Directory
-│   │   ├── FragmentShader_12.glsl      // Fragment Shader
-│   │   └── VertexShader_12.glsl        // Vertex Shader
-│   └── src                             // Ask2 src Directory
-│       └── 58633_12.cpp                // Ask2 main
+├── ask2                            # Ask2 Directory                                     
+│   ├── shaders                     # Ask2 Shader Directory
+│   │   ├── FragmentShader_12.glsl  # Fragment Shader
+│   │   └── VertexShader_12.glsl    # Vertex Shader
+│   └── src                         # Ask2 src Directory
+│       └── 58633_12.cpp            # Ask2 main
 │
-├── ask3                                // Ask3 Directory
-│   ├── shaders                         // Ask3 Shader Directory
-│   │   ├── FragmentShader_13.glsl      // Fragment Shader
-│   │   └── VertexShader_13.glsl        // Vertex Shader
-│   └── src                             // Ask3 src Directory
-│       └── 58633_13.cpp                // Ask3 main
+├── ask3                            # Ask3 Directory
+│   ├── shaders                     # Ask3 Shader Directory
+│   │   ├── FragmentShader_13.glsl  # Fragment Shader
+│   │   └── VertexShader_13.glsl    # Vertex Shader
+│   └── src                         # Ask3 src Directory
+│       └── 58633_13.cpp            # Ask3 main
 │
-├── ask4                                // Ask4 Directory
-│   ├── shaders                         // Ask4 Shader Directory
-│   │   ├── Fragment_light_21.glsl      // Fragment Shader for light cube
-│   │   ├── FragmentShader_21.glsl      // Fragment Shader
-│   │   ├── Vertex_light_21.glsl        // Vertex Shader for light cube
-│   │   └── VertexShader_21.glsl        // Vertex Shader
-│   └── src                             // Ask4 src Directory
-│       ├── 58633_21.cpp				// Ask4 main
-│       ├── Camera.hpp					// Camera file
-│       ├── helper.cpp					// Helper lib for ask4
-│       └── helper.hpp					// Helper lib for ask4
-├── compile_commands.json				// Compiler command file for cland
+├── ask4                            # Ask4 Directory
+│   ├── shaders                     # Ask4 Shader Directory
+│   │   ├── Fragment_light_21.glsl  # Fragment Shader for light cube
+│   │   ├── FragmentShader_21.glsl  # Fragment Shader
+│   │   ├── Vertex_light_21.glsl    # Vertex Shader for light cube
+│   │   └── VertexShader_21.glsl    # Vertex Shader
+│   └── src                         # Ask4 src Directory
+│       ├── 58633_21.cpp            # Ask4 main
+│       ├── Camera.hpp              # Camera file
+│       ├── helper.cpp              # Helper lib for ask4
+│       └── helper.hpp              # Helper lib for ask4
+├── compile_commands.json           # Compiler command file for cland
 │
-├── lib									// Lib Directory
-│   ├── dbg_assert.c					// Contains functions for debugging
+├── lib                             # Lib Directory
+│   ├── dbg_assert.c                # Contains functions for debugging
 │   ├── dbg_assert.h
-│   ├── shader_utl.c					// Contains functions for loading shaders
+│   ├── shader_utl.c                # Contains functions for loading shaders
 │   ├── shader_utl.h
-│   ├── vertexArray						// Contains files that abstract the vao/vbo process
+│   ├── vertexArray                 # Contains files that abstract the vao/vbo process
 │   │   ├── vao.c
 │   │   ├── vao.h
 │   │   ├── vbLayout.c
 │   │   ├── vbLayout.h
 │   │   ├── vbo.c
 │   │   └── vbo.h
-│   ├── windowGlfw.c					// Contains abstractions for glfw
+│   ├── windowGlfw.c                # Contains abstractions for glfw
 │   └── windowGlfw.h
-├── Makefile							// Makefile for building project
-├── README.org							// Contains instructions for the project
-└── shaders								// Simple shaders for testing
+├── Makefile                        # Makefile for building project
+├── README.org                      # Contains instructions for the project
+└── shaders                         # Simple shaders for testing
     ├── testFragmentShader.glsl
     └── testVertexShader.glsl
 #+end_src
