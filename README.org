@@ -1,0 +1,82 @@
+* OpenGL Erg 2
+
+** Project Structure
+
+#+begin_src shell
+.
+├── 58633.zip							// Zip that was uploaded to eclass
+├── ask1								// Ask1 Directory
+│   ├── shaders							// Ask1 Shader Directory
+│   │   ├── FragmentShader_11.glsl		// Fragment Shader
+│   │   └── VertexShader_11.glsl		// Vertex Shader
+│   └── src								// Ask1 src Directory
+│       ├── 58633_11.cpp				// Ask1 main
+│       ├── polygon.cpp					// Calculates the polygon vertices based on the AEM
+│       └── polygon.h
+│
+├── ask2								// Ask2 Directory                                     
+│   ├── shaders                         // Ask2 Shader Directory
+│   │   ├── FragmentShader_12.glsl      // Fragment Shader
+│   │   └── VertexShader_12.glsl        // Vertex Shader
+│   └── src                             // Ask2 src Directory
+│       └── 58633_12.cpp                // Ask2 main
+│
+├── ask3                                // Ask3 Directory
+│   ├── shaders                         // Ask3 Shader Directory
+│   │   ├── FragmentShader_13.glsl      // Fragment Shader
+│   │   └── VertexShader_13.glsl        // Vertex Shader
+│   └── src                             // Ask3 src Directory
+│       └── 58633_13.cpp                // Ask3 main
+│
+├── ask4                                // Ask4 Directory
+│   ├── shaders                         // Ask4 Shader Directory
+│   │   ├── Fragment_light_21.glsl      // Fragment Shader for light cube
+│   │   ├── FragmentShader_21.glsl      // Fragment Shader
+│   │   ├── Vertex_light_21.glsl        // Vertex Shader for light cube
+│   │   └── VertexShader_21.glsl        // Vertex Shader
+│   └── src                             // Ask4 src Directory
+│       ├── 58633_21.cpp				// Ask4 main
+│       ├── Camera.hpp					// Camera file
+│       ├── helper.cpp					// Helper lib for ask4
+│       └── helper.hpp					// Helper lib for ask4
+├── compile_commands.json				// Compiler command file for cland
+│
+├── lib									// Lib Directory
+│   ├── dbg_assert.c					// Contains functions for debugging
+│   ├── dbg_assert.h
+│   ├── shader_utl.c					// Contains functions for loading shaders
+│   ├── shader_utl.h
+│   ├── vertexArray						// Contains files that abstract the vao/vbo process
+│   │   ├── vao.c
+│   │   ├── vao.h
+│   │   ├── vbLayout.c
+│   │   ├── vbLayout.h
+│   │   ├── vbo.c
+│   │   └── vbo.h
+│   ├── windowGlfw.c					// Contains abstractions for glfw
+│   └── windowGlfw.h
+├── Makefile							// Makefile for building project
+├── README.org							// Contains instructions for the project
+└── shaders								// Simple shaders for testing
+    ├── testFragmentShader.glsl
+    └── testVertexShader.glsl
+#+end_src
+
+** Build Steps
+
+Η εργασία έχει ένα Makefile για να γίνει compiled η κάθε άσκηση της εργασίας σε πλατφόρμα linux.
+
+Για Ubuntu χρείαζονται τα glfw, glew και pkg-config.
+Παράδειγμα εγκατάστασης τους στα Ubuntu:
+
+#+begin_src shell
+sudo apt install libglfw3-dev
+sudo apt install libglew-dev
+sudo apt install libgl1-mesa-dev
+#+end_src
+
+Όλες οι ασκήσεις γίνονται compiled με την εντολή ~make~. Με την εντολή ~make exec{num}~, όπου num είναι ο αριθμός κάθε άσκησης τρέχει η κάθε άσκηση. Για παράδειγμα για να τρέξουμε την άσκηση 1 χρησιμοποιούμε την εντολή ~make exec1~. Όλες οι εντολές πρέπει να εκτελεθούν από το directory της εργασίας.
+
+** Notes
+
+Όλες οι ασκήσεις ολοκληρώθηκαν εκτός από την 4η λόγω έλειψης χρόνου. Άπο την άσκηση 4 λείπουν ορισμένες από τις επιλογές του ImGui.

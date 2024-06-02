@@ -118,7 +118,7 @@ exec4:
 cleanAll: clean cleanImgui
 
 clean:
-	rm $(ASK1_TARGET) $(ASK2_TARGET) $(ASK3_TARGET) $(ASK4_TARGET) $(LIB_OBJS) $(CXX_OBJS) imgui.ini
+	rm $(ASK1_TARGET) $(ASK2_TARGET) $(ASK3_TARGET) $(ASK4_TARGET) $(LIB_OBJS) $(ASK1_OBJS) $(ASK2_OBJS) $(ASK3_OBJS) $(ASK4_OBJS) imgui.ini
 
 cleanImgui:
 	rm $(IMGUI_OBJS)
